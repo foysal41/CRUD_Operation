@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Item;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
@@ -11,7 +11,8 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        $items = Item::all();
+        return view('items.index', compact('items'));
     }
 
     /**
@@ -19,7 +20,7 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+        return view('items.create');
     }
 
     /**
@@ -27,7 +28,12 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+           'name'  => 'required',
+           'description' => 'nullable'
+        ]);
+
+        return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }
 
     /**
@@ -35,7 +41,7 @@ class ItemController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view('items.show', compact('item'));
     }
 
     /**
@@ -43,22 +49,29 @@ class ItemController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('items.edit', compact('item'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Item $item)
     {
-        //
+        $request->validate([
+            'name'  => 'required',
+            'description' => 'nullable'
+        ]);
+
+        $item->update($request->all());
+        return redirect()->route('items.index')->with('success', 'Item updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Item $item)
     {
-        //
+        $item-> delete();
+        return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
     }
 }
