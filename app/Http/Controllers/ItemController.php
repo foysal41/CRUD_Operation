@@ -33,13 +33,15 @@ class ItemController extends Controller
            'description' => 'nullable'
         ]);
 
+        Item::create($request->all());
+
         return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Item $item)
     {
         return view('items.show', compact('item'));
     }
@@ -47,7 +49,7 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Item $item)
     {
         return view('items.edit', compact('item'));
     }
@@ -71,7 +73,7 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
-        $item-> delete();
+        $item->delete();
         return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
     }
 }
